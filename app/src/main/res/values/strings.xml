@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Seg2105project</string>
+    <string name="education_level_prompt">Select Education Level</string>
+    <string-array name="education_levels">
+        <item>Bachelors</item>
+        <item>Associate</item>
+        <item>Masters</item>
+        <item>High School Diploma
+</item>
+        <item>MastersOther Degrees</item>
+    </string-array>
+
+    <string name="native_language_prompt">Select Native Language</string>
+    <string-array name="native_languages">
+        <item>English</item>
+        <item>French</item>
+        <item>Other</item>
+    </string-array>
+</resources>
