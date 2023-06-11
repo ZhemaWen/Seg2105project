@@ -13,6 +13,9 @@
         android:theme="@style/Theme.Seg2105project"
         tools:targetApi="31">
         <activity
+            android:name=".home"
+            android:exported="false" />
+        <activity
             android:name=".adminHome"
             android:exported="false" />
         <activity

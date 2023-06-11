@@ -10,7 +10,7 @@
         android:id="@+id/textView"
         android:layout_width="317dp"
         android:layout_height="133dp"
-        android:text="Welcome to Tutron. You are logged in as an Admin"
+        android:text="Welcome to Tutron. You are logged in as an User"
         tools:layout_editor_absoluteX="47dp"
         tools:layout_editor_absoluteY="177dp" />
 

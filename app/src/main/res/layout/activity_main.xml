@@ -6,6 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <TextView
+        android:id="@+id/welcomeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome to the app TUTRON"
+        android:textSize="24sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/loginButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0.5"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"/>
+
     <Button
         android:id="@+id/loginButton"
         android:layout_width="0dp"
@@ -13,11 +27,11 @@
         android:text="Login"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/welcomeText"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintWidth_percent="0.6"
         app:layout_constraintVertical_bias="0.5"
-        app:layout_constraintBottom_toTopOf="@+id/registerButton"
+        android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"/>
 
     <Button
@@ -32,6 +46,5 @@
         app:layout_constraintWidth_percent="0.6"
         app:layout_constraintVertical_bias="0.5"
         android:layout_marginTop="16dp"/>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,6 +2,7 @@ package com.example.seg2105project;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -11,27 +12,28 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class adminHome extends AppCompatActivity {
+public class home extends AppCompatActivity {
 
     private Button logoutButton;
     FirebaseAuth auth;
     FirebaseUser user;
     TextView textView;
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_admin_home);
+        setContentView(R.layout.activity_home);
         textView = findViewById(R.id.textView);
         logoutButton = findViewById(R.id.logoutButton);
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         if(user == null){
-            Intent intent = new Intent(adminHome.this, LogIn.class);
+            Intent intent = new Intent(home.this, LogIn.class);
             startActivity(intent);
             finish();
         }
         else{
-            textView.setText("Welcome admin");
+            textView.setText("Welcome "+user.getEmail());
         }
 
         logoutButton.setOnClickListener(new View.OnClickListener() {
@@ -48,7 +50,7 @@ public class adminHome extends AppCompatActivity {
         FirebaseAuth.getInstance().signOut();
 
         //For example, you can redirect to the login activity
-        Intent intent = new Intent(adminHome.this, LogIn.class);
+        Intent intent = new Intent(home.this, LogIn.class);
         startActivity(intent);
         finish(); // Optional: If you want to finish the current activity after logout
     }
