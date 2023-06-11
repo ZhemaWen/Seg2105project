@@ -11,6 +11,9 @@
     </string-array>
 
     <string name="native_language_prompt">Select Native Language</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="tutron">Tutron</string>
     <string-array name="native_languages">
         <item>English</item>
         <item>French</item>
