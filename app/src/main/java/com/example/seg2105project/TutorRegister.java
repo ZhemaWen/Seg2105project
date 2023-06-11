@@ -19,7 +19,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.SignInMethodQueryResult;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class TutorRegister extends AppCompatActivity {
     private EditText firstNameEditText;
@@ -168,6 +171,7 @@ public class TutorRegister extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
                         if (task.isSuccessful()) {
+
                             SignInMethodQueryResult result = task.getResult();
                             if (result != null && result.getSignInMethods() != null && result.getSignInMethods().size() > 0) {
                                 // Email is already registered
@@ -179,6 +183,14 @@ public class TutorRegister extends AppCompatActivity {
                                             @Override
                                             public void onComplete(@NonNull Task<AuthResult> task) {
                                                 if (task.isSuccessful()) {
+                                                    FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                                                    // Get the current user's ID
+                                                    String userId = mAuth.getCurrentUser().getUid();
+
+                                                    DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference().child("users");
+
+                                                    usersRef.child(userId).child("userType").setValue("Tutor");
+
                                                     Toast.makeText(TutorRegister.this, "Registration successful", Toast.LENGTH_SHORT).show();
                                                 } else {
                                                     Toast.makeText(TutorRegister.this, "Authentication failed", Toast.LENGTH_SHORT).show();

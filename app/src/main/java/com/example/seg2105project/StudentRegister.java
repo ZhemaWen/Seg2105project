@@ -16,7 +16,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.SignInMethodQueryResult;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 
 public class StudentRegister extends AppCompatActivity {
@@ -144,6 +147,13 @@ public class StudentRegister extends AppCompatActivity {
                                             @Override
                                             public void onComplete(@NonNull Task<AuthResult> task) {
                                                 if (task.isSuccessful()) {
+                                                    FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                                                    // Get the current user's ID
+                                                    String userId = mAuth.getCurrentUser().getUid();
+
+                                                    DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference().child("users");
+
+                                                    usersRef.child(userId).child("userType").setValue("Student");
                                                     Toast.makeText(StudentRegister.this, "Registration successful", Toast.LENGTH_SHORT).show();
                                                 } else {
                                                     Toast.makeText(StudentRegister.this, "Authentication failed", Toast.LENGTH_SHORT).show();
