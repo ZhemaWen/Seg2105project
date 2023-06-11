@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/neutralpattern"
     tools:context=".MainActivity">
 
     <Button
@@ -16,6 +17,8 @@
         android:layout_marginBottom="16dp"
         android:fontFamily="@font/calistoga"
         android:text="@string/login"
+        android:textSize="22sp"
+        app:backgroundTint="@color/latte"
         app:layout_constraintBottom_toTopOf="@+id/registerButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -31,6 +34,9 @@
         android:layout_marginTop="16dp"
         android:fontFamily="@font/calistoga"
         android:text="@string/register"
+        android:textColor="@color/dark_mocha"
+        android:textSize="22sp"
+        app:backgroundTint="@color/latte"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -47,7 +53,7 @@
         android:layout_marginBottom="100dp"
         android:fontFamily="@font/lobster"
         android:text="@string/tutron"
-        android:textSize="24sp"
+        android:textSize="40sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

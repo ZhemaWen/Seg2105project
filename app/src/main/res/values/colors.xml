@@ -2,4 +2,9 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="neutral_brown">#E0C493</color>
+    <color name="nude_tone1">#E5CDBF</color>
+    <color name="nude_light_toffee">#DFD4C7</color>
+    <color name="latte">#BDAB98</color>
+    <color name="dark_mocha">#201810</color>
 </resources>
