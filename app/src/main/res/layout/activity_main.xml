@@ -4,47 +4,59 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/img"
     tools:context=".MainActivity">
 
     <TextView
         android:id="@+id/welcomeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome to the app TUTRON"
-        android:textSize="24sp"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/lobster"
+        android:shadowColor="@color/mocha"
+        android:shadowDx="5"
+        android:shadowDy="5"
+        android:shadowRadius="5"
+        android:text="Tutron"
+        android:textColor="@color/mocha"
+        android:textSize="40sp"
         app:layout_constraintBottom_toTopOf="@+id/loginButton"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias="0.5"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
 
     <Button
         android:id="@+id/loginButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="150dp"
+        android:fontFamily="@font/calistoga"
         android:text="Login"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@color/mocha"
+        android:textSize="24sp"
+        app:backgroundTint="@color/latte_brown"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/welcomeText"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintWidth_percent="0.6"
-        app:layout_constraintVertical_bias="0.5"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/welcomeText"
+        app:layout_constraintWidth_percent="0.6" />
 
     <Button
         android:id="@+id/registerButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/calistoga"
         android:text="Register"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        app:backgroundTint="@color/latte_brown"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginButton"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintWidth_percent="0.6"
-        app:layout_constraintVertical_bias="0.5"
-        android:layout_marginTop="16dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginButton"
+        app:layout_constraintWidth_percent="0.6" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
