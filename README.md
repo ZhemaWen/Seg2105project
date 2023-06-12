@@ -3,4 +3,4 @@ The objective of this project is to create a tutoring application, 'Tutron', tha
 This application supports:
 - Students 
 - Tutors
-- Administrators
+- Administrators （admin@4code.com password: 4code4code)
