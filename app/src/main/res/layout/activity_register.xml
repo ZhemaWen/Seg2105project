@@ -4,32 +4,43 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/library"
     tools:context=".Register">
 
     <Button
         android:id="@+id/studentButton"
+        android:layout_width="190dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="160dp"
+        android:layout_marginEnd="160dp"
+        android:fontFamily="@font/calistoga"
+        android:text="As a Student"
+        android:textColor="@color/dark_mocha"
+        android:textSize="24sp"
+        app:backgroundTint="@color/latte"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="As a Student"
-        tools:layout_editor_absoluteX="57dp"
-        tools:layout_editor_absoluteY="219dp" />
+        app:layout_constraintVertical_bias="0.4" />
 
     <Button
         android:id="@+id/tutorButton"
+        android:layout_width="190dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="160dp"
+        android:layout_marginEnd="160dp"
+        android:layout_marginBottom="300dp"
+        android:fontFamily="@font/calistoga"
+        android:text="As a Tutor"
+        android:textColor="@color/nude_light_toffee"
+        android:textSize="24sp"
+        app:backgroundTint="@color/brown_latte"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/loginButton"
         app:layout_constraintVertical_bias="0.2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="As a Tutor"
-        tools:layout_editor_absoluteX="234dp"
-        tools:layout_editor_absoluteY="219dp" />
+        tools:ignore="NotSibling" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
