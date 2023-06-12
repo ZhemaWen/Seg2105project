@@ -2,4 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="mocha">#201810</color>
+    <color name="light_beige">#F2E0CC</color>
+    <color name="mocha_light">#B28D6A</color>
 </resources>
