@@ -24,6 +24,8 @@ import com.google.firebase.auth.SignInMethodQueryResult;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Date;
+
 public class TutorRegister extends AppCompatActivity {
     private EditText firstNameEditText;
     private EditText lastNameEditText;
@@ -166,40 +168,52 @@ public class TutorRegister extends AppCompatActivity {
 
 
         // Perform tutor registration using Firebase Authentication
-        mAuth.fetchSignInMethodsForEmail(email)
-                .addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(TutorRegister.this, new OnCompleteListener<AuthResult>() {
                     @Override
-                    public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
+                    public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                            // Get the current user's ID
+                            String userId = mAuth.getCurrentUser().getUid();
 
-                            SignInMethodQueryResult result = task.getResult();
-                            if (result != null && result.getSignInMethods() != null && result.getSignInMethods().size() > 0) {
-                                // Email is already registered
-                                Toast.makeText(TutorRegister.this, "This email is already registered", Toast.LENGTH_SHORT).show();
-                            } else {
-                                // Email is not registered, proceed with registration
-                                mAuth.createUserWithEmailAndPassword(email, password)
-                                        .addOnCompleteListener(TutorRegister.this, new OnCompleteListener<AuthResult>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                                if (task.isSuccessful()) {
-                                                    FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                                                    // Get the current user's ID
-                                                    String userId = mAuth.getCurrentUser().getUid();
+                            DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference().child("users");
 
-                                                    DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference().child("users");
+                            // Create a Tutor object with all the information
+                            Tutor tutor = new Tutor(userId,firstName, lastName, email, educationLevel, nativeLanguage, description);
 
-                                                    usersRef.child(userId).child("userType").setValue("Tutor");
-
-                                                    Toast.makeText(TutorRegister.this, "Registration successful", Toast.LENGTH_SHORT).show();
-                                                } else {
-                                                    Toast.makeText(TutorRegister.this, "Authentication failed", Toast.LENGTH_SHORT).show();
-                                                }
+                            // Save the Tutor object to the database
+                            usersRef.child(userId).child("userType").setValue("Tutor");
+                            usersRef.child(userId).child("userInfo").setValue(tutor)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                // Generate a complaint for the newly registered tutor
+                                                DatabaseReference complaintsRef = FirebaseDatabase.getInstance().getReference().child("complaints");
+                                                String complaintId = complaintsRef.push().getKey();
+                                                String complaintDescription = "New tutor registration complaint";
+                                                long currentTimestamp = System.currentTimeMillis();
+                                                Date date = new Date(currentTimestamp);
+                                                Complaint complaint = new Complaint(complaintId, userId, complaintDescription, date);
+                                                complaintsRef.child(complaintId).setValue(complaint)
+                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                if (task.isSuccessful()) {
+                                                                    Toast.makeText(TutorRegister.this, "Registration successful", Toast.LENGTH_SHORT).show();
+                                                                } else {
+                                                                    Toast.makeText(TutorRegister.this, "Failed to save tutor information", Toast.LENGTH_SHORT).show();
+                                                                }
+                                                            }
+                                                        });
+                                            } else {
+                                                Toast.makeText(TutorRegister.this, "Failed to save tutor information", Toast.LENGTH_SHORT).show();
                                             }
-                                        });
-                            }
+                                        }
+                                    });
                         } else {
-                            Toast.makeText(TutorRegister.this, "Failed to check email registration status", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TutorRegister.this, "Authentication failed", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
