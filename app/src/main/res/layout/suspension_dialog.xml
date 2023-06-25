@@ -23,4 +23,10 @@
         android:layout_height="wrap_content"
         android:text="Suspend for 7 Days" />
 
+    <Button
+        android:id="@+id/buttonIndefinitely"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Suspend indefinitely" />
+
 </LinearLayout>
