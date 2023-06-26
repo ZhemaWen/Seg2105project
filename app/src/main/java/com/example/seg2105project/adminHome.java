@@ -144,9 +144,18 @@ public class adminHome extends AppCompatActivity {
         Button button1Hour = dialogView.findViewById(R.id.button1Hour);
         Button button24Hours = dialogView.findViewById(R.id.button24Hours);
         Button button7Days = dialogView.findViewById(R.id.button7Days);
+        Button buttonIndefinitely = dialogView.findViewById(R.id.buttonIndefinitely);
 
         final AlertDialog dialog = dialogBuilder.create();
         dialog.show();
+
+        buttonIndefinitely.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                suspendTutor(complaint, 10* 24);
+                dialog.dismiss();
+            }
+        });
 
         button1Hour.setOnClickListener(new View.OnClickListener() {
             @Override
