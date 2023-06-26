@@ -4,21 +4,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/img"
     tools:context=".adminHome">
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="317dp"
         android:layout_height="133dp"
+        android:layout_marginStart="47dp"
+        android:layout_marginTop="177dp"
+        android:layout_marginEnd="47dp"
+        android:background="@color/latte_brown"
+        android:fontFamily="@font/calistoga"
         android:text="Welcome to Tutron. You are logged in as an Admin"
-        tools:layout_editor_absoluteX="47dp"
-        tools:layout_editor_absoluteY="177dp" />
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/logoutButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/logoutButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/calistoga"
         android:text="Logout"
+        android:textSize="14sp"
+        app:backgroundTint="@color/latte_brown"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
