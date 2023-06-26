@@ -4,3 +4,5 @@ This application supports:
 - Students 
 - Tutors
 - Administrators （admin@4code.com password: 4code4code)
+
+to make it easier for testing Deliverable 2, when register tutor, a complaint will also save into the database for the new tutor
