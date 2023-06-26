@@ -42,6 +42,9 @@
         android:id="@+id/buttonIndefinitely"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Suspend indefinitely" />
+        android:fontFamily="@font/calistoga"
+        android:text="Suspend indefinitely"
+        android:textSize="20sp"
+        app:backgroundTint="@color/mocha" />
 
 </LinearLayout>
