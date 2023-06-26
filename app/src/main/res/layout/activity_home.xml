@@ -29,7 +29,7 @@
         android:layout_width="317dp"
         android:layout_height="133dp"
         android:layout_marginTop="28dp"
-        android:text="asdsadasdasdasdasdas"
+        android:text=""
         app:layout_constraintTop_toBottomOf="@+id/logoutButton"
         tools:layout_editor_absoluteX="205dp" />
 

@@ -38,4 +38,10 @@
         android:textSize="20sp"
         app:backgroundTint="@color/mocha_light" />
 
+    <Button
+        android:id="@+id/buttonIndefinitely"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Suspend indefinitely" />
+
 </LinearLayout>
