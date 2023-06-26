@@ -4,21 +4,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/library"
     tools:context=".adminHome">
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="317dp"
         android:layout_height="133dp"
+        android:layout_marginStart="47dp"
+        android:layout_marginTop="177dp"
+        android:layout_marginEnd="47dp"
+        android:background="@color/latte"
+        android:fontFamily="@font/lobster"
+        android:shadowDx="20"
+        android:shadowDy="30"
+        android:shadowRadius="20"
         android:text="Welcome to Tutron. You are logged in as an User"
-        tools:layout_editor_absoluteX="47dp"
-        tools:layout_editor_absoluteY="177dp" />
+        android:textSize="34sp"
+        app:layout_constraintBottom_toTopOf="@+id/logoutButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/logoutButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="28dp"
+        android:fontFamily="@font/calistoga"
         android:text="Logout"
+        android:textColor="@color/mocha"
+        app:backgroundTint="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/messagetextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,9 +45,13 @@
         android:id="@+id/messagetextView"
         android:layout_width="317dp"
         android:layout_height="133dp"
+        android:layout_marginStart="205dp"
         android:layout_marginTop="28dp"
+        android:layout_marginBottom="212dp"
         android:text=""
-        app:layout_constraintTop_toBottomOf="@+id/logoutButton"
-        tools:layout_editor_absoluteX="205dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logoutButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
