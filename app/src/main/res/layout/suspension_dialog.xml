@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/img"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -9,18 +11,31 @@
         android:id="@+id/button1Hour"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Suspend for 1 Hour" />
+        android:fontFamily="@font/calistoga"
+        android:text="Suspend for 1 Hour"
+        android:textColor="@color/mocha"
+        android:textSize="20sp"
+        app:backgroundTint="@color/latte" />
 
     <Button
         android:id="@+id/button24Hours"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Suspend for 24 Hours" />
+        android:fontFamily="@font/calistoga"
+        android:text="Suspend for 24 Hours"
+        android:textColor="@color/light_beige"
+        android:textColorLink="@color/latte_brown"
+        android:textSize="20sp"
+        app:backgroundTint="@color/latte_brown" />
 
     <Button
         android:id="@+id/button7Days"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Suspend for 7 Days" />
+        android:fontFamily="@font/calistoga"
+        android:text="Suspend for 7 Days"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:backgroundTint="@color/mocha_light" />
 
 </LinearLayout>
