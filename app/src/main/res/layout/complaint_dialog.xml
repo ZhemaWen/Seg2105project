@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/img"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -9,19 +11,25 @@
         android:id="@+id/textViewComplaintDetails"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:paddingBottom="8dp" />
+        android:paddingBottom="8dp"
+        android:textSize="16sp" />
 
     <Button
         android:id="@+id/buttonDismiss"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Dismiss" />
+        android:fontFamily="@font/calistoga"
+        android:text="Dismiss"
+        android:textSize="20sp"
+        app:backgroundTint="@color/latte_brown" />
 
     <Button
         android:id="@+id/buttonSuspend"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Suspend" />
+        android:fontFamily="@font/calistoga"
+        android:text="Suspend"
+        android:textSize="20sp"
+        app:backgroundTint="@color/mocha_light" />
 
 </LinearLayout>
