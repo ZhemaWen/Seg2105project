@@ -35,7 +35,7 @@ public class TutorRegister extends AppCompatActivity {
     private Spinner nativeLanguageSpinner;
     private EditText descriptionEditText;
     private Button registerButton;
-    private FirebaseAuth mAuth;
+    public FirebaseAuth mAuth;
     Button BSelectImage;
     private ImageView IVPreviewImage;
 
@@ -105,7 +105,7 @@ public class TutorRegister extends AppCompatActivity {
             }
         }
     }
-    private void register() {
+    void register() {
         // Get input values
         String firstName = firstNameEditText.getText().toString().trim();
         String lastName = lastNameEditText.getText().toString().trim();
