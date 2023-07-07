@@ -17,12 +17,20 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class LogIn extends AppCompatActivity {
     private EditText userNameET;
     private EditText passwordET;
     private Button loginButton;
     FirebaseAuth mAuth;
+    private DatabaseReference userTypeRef;
+
+
     @Override
     public void onStart() {
         super.onStart();
@@ -69,39 +77,58 @@ public class LogIn extends AppCompatActivity {
                 }
 
 
-                    mAuth.signInWithEmailAndPassword(email, password)
-                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if (task.isSuccessful()) {
-                                        Toast.makeText(LogIn.this, "Login Successful",
-                                                Toast.LENGTH_SHORT).show();
-                                        if (isValidAdmin(email, password)) {
-                                            // Successful login
-                                            Intent intent = new Intent(LogIn.this, adminHome.class);
-                                            startActivity(intent);
-                                        }
-                                        else{
-                                            Intent intent=new Intent(LogIn.this, home.class);
-                                            startActivity(intent);
-                                            finish();
-                                        }
-
-
+                mAuth.signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(LogIn.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                                    if (isValidAdmin(email, password)) {
+                                        // Successful login as admin
+                                        Intent intent = new Intent(LogIn.this, adminHome.class);
+                                        startActivity(intent);
+                                        finish();
                                     } else {
-                                        // If sign in fails, display a message to the user.
+                                        FirebaseUser user = mAuth.getCurrentUser();
+                                        if (user != null) {
+                                            userTypeRef = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid()).child("userType");
 
-                                        Toast.makeText(LogIn.this, "Authentication failed.",
-                                                Toast.LENGTH_SHORT).show();
+                                            userTypeRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                    String userType = dataSnapshot.getValue(String.class);
+                                                    if (userType != null) {
+                                                        if (userType.equals("Tutor")) {
+                                                            // Successful login as tutor
+                                                            Intent intent = new Intent(LogIn.this, home.class);
+                                                            startActivity(intent);
+                                                            finish();
+                                                        } else {
+                                                            // Successful login as student
+                                                            Intent intent = new Intent(LogIn.this, studentActivity.class);
+                                                            startActivity(intent);
+                                                            finish();
+                                                        }
+                                                    }
+                                                }
 
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                    // Handle error
+                                                }
+                                            });
+                                        }
                                     }
+                                } else {
+                                    // If sign in fails, display a message to the user.
+                                    Toast.makeText(LogIn.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                                 }
-                            });
-
+                            }
+                        });
             }
         });
     }
-    boolean isValidAdmin(String userName, String password) {
+    private boolean isValidAdmin(String userName, String password) {
         //admin
         String adminEmail = "admin@4code.com";
         String adminPassword = "4code4code";

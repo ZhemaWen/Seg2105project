@@ -1,14 +1,22 @@
 package com.example.seg2105project;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -17,85 +25,73 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class home extends AppCompatActivity {
 
-    private Button logoutButton;
-    private TextView textView,messagetextview;
+    private Button logoutButton, topicButton;
+    private TextView textView, messagetextview;
     private FirebaseAuth auth;
     private FirebaseUser user;
-    private DatabaseReference userTypeRef,suspensionEndTimeRef;
+    private DatabaseReference suspensionEndTimeRef;
+    private DatabaseReference topicsRef;
+
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         textView = findViewById(R.id.textView);
-        messagetextview=findViewById(R.id.messagetextView);
+        messagetextview = findViewById(R.id.messagetextView);
         logoutButton = findViewById(R.id.logoutButton);
+        topicButton = findViewById(R.id.topicButton);
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
-        if(user == null){
+
+        if (user == null) {
             Intent intent = new Intent(home.this, LogIn.class);
             startActivity(intent);
             finish();
-        }
-        else{
-            userTypeRef = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid()).child("userType");
-            suspensionEndTimeRef = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid()).child("suspensionEndTime");
-
-            // Attach a listener to retrieve the account type value
-            userTypeRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    // Retrieve the account type value from the dataSnapshot
-                    String userType = dataSnapshot.getValue(String.class);
-
-
-                    // Update the welcome message with the user type
-                    textView.setText("Welcome " + user.getEmail() + ", you are logged in as a " + userType);
-
-                    if (userType.equals("Tutor")) {
-                        checkSuspensionStatus();
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    // Handle any errors that occur during the database read operation
-                    // You can log or display an error message as needed
-                }
-            });
+        } else {
+            textView.setText("Welcome " + user.getEmail() + ", you are logged in as a tutor");
         }
 
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle logout button click
                 logout();
             }
         });
+
+        topicButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayTopics();
+            }
+        });
+
+        checkSuspensionStatus();
     }
 
     private void logout() {
-        // Perform logout operation here
         FirebaseAuth.getInstance().signOut();
-
-        //For example, you can redirect to the login activity
         Intent intent = new Intent(home.this, LogIn.class);
         startActivity(intent);
-        finish(); // Optional: If you want to finish the current activity after logout
+        finish();
     }
+
     private void checkSuspensionStatus() {
-        DatabaseReference suspensionRef = FirebaseDatabase.getInstance().getReference()
+        suspensionEndTimeRef = FirebaseDatabase.getInstance().getReference()
                 .child("users")
                 .child(user.getUid())
                 .child("suspensionEndTime");
 
-        suspensionRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        suspensionEndTimeRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Long suspensionEndTime = dataSnapshot.getValue(Long.class);
-                messagetextview.setText(String.valueOf(suspensionEndTime));
+                messagetextview.setText("suspension end");
                 if (suspensionEndTime != null && suspensionEndTime > System.currentTimeMillis()) {
                     // The tutor is suspended
                     long remainingTimeMillis = suspensionEndTime - System.currentTimeMillis();
@@ -112,9 +108,106 @@ public class home extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 // Handle any errors that occur during the database read operation
-                // You can log or display an error message as needed
             }
         });
     }
+    private void displayTopics() {
+        topicsRef = FirebaseDatabase.getInstance().getReference(). child("users")
+                .child(user.getUid())
+                .child("topics");
 
+        topicsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<Topic> topics = new ArrayList<>();
+                for (DataSnapshot topicSnapshot : dataSnapshot.getChildren()) {
+                    Topic topic = topicSnapshot.getValue(Topic.class);
+                    if (topic != null) {
+                        topics.add(topic);
+                    }
+                }
+
+                // Create a dialog to display the topics list
+                AlertDialog.Builder builder = new AlertDialog.Builder(home.this);
+                View dialogView = getLayoutInflater().inflate(R.layout.topiclist, null);
+                builder.setView(dialogView);
+
+                // Retrieve the ListView from the dialog view
+                ListView listViewTopics = dialogView.findViewById(R.id.listViewTopics);
+
+                // Set up the adapter for the ListView
+                TopicList adapter = new TopicList(home.this, topics);
+                listViewTopics.setAdapter(adapter);
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                Button addTopic = dialogView.findViewById(R.id.buttonAddTopic);
+
+
+
+                addTopic.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showAddTopic();
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle error
+            }
+        });
+
+    }
+    private void showAddTopic() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(home.this);
+        View dialogView = getLayoutInflater().inflate(R.layout.addtopic, null);
+        builder.setView(dialogView);
+
+        EditText editTextTopicName = dialogView.findViewById(R.id.editTextTopicName);
+        EditText editTextYearsOfExperience = dialogView.findViewById(R.id.editTextYearsOfExperience);
+        EditText editTextExperienceDescription = dialogView.findViewById(R.id.editTextExperienceDescription);
+        Button buttonAddTopic = dialogView.findViewById(R.id.buttonAddTopic);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        buttonAddTopic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String topicName = editTextTopicName.getText().toString().trim();
+                String yearsOfExperience = editTextYearsOfExperience.getText().toString().trim();
+                String experienceDescription = editTextExperienceDescription.getText().toString().trim();
+
+                // Validate the input fields
+                if (topicName.isEmpty() || yearsOfExperience.isEmpty() || experienceDescription.isEmpty()) {
+                    Toast.makeText(home.this, "Please fill in all the fields", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Create a new Topic object with the input data
+                String topicId = topicsRef.push().getKey();
+                Topic topic = new Topic(topicId, topicName, yearsOfExperience, experienceDescription);
+
+                // Save the topic to the database
+                topicsRef.child(topicId).setValue(topic)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(home.this, "Topic added successfully", Toast.LENGTH_SHORT).show();
+                                    dialog.dismiss();
+                                } else {
+                                    Toast.makeText(home.this, "Failed to add topic", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+            }
+        });
+    }
 }
+
+
+
+
