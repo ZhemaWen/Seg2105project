@@ -98,14 +98,15 @@ public class LogIn extends AppCompatActivity {
                                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                                     String userType = dataSnapshot.getValue(String.class);
                                                     if (userType != null) {
-                                                        if (userType.equals("Tutor")) {
-                                                            // Successful login as tutor
-                                                            Intent intent = new Intent(LogIn.this, home.class);
+                                                        if (userType.equals("Student")) {
+                                                            // Successful login as student
+                                                            Intent intent = new Intent(LogIn.this, StudentHome.class);
                                                             startActivity(intent);
                                                             finish();
-                                                        } else {
-                                                            // Successful login as student
-                                                            Intent intent = new Intent(LogIn.this, studentActivity.class);
+                                                        } else  {
+
+                                                            // Successful
+                                                            Intent intent = new Intent(LogIn.this, home.class);
                                                             startActivity(intent);
                                                             finish();
                                                         }
