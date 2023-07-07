@@ -34,4 +34,18 @@ public class TopicList extends ArrayAdapter<Topic> {
 
         return listViewItem;
     }
+
+    boolean isTopicAdded(Topic topic) {
+        if (topics.contains(topic)) {
+            return true;
+        }
+        return false;
+    }
+
+    boolean isTopicDeleted(Topic topic) {
+        if (topics.contains(topic)) {
+            return false;
+        }
+        return true;
+    }
 }
