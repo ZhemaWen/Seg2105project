@@ -180,6 +180,14 @@ public class adminHome extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
+
+        buttonIndefinitely.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                suspendTutor(complaint, 100000 * 24);
+                dialog.dismiss();
+            }
+        });
     }
 
     private void suspendTutor(Complaint complaint, int durationInHours) {

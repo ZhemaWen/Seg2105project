@@ -129,7 +129,7 @@ public class LogIn extends AppCompatActivity {
             }
         });
     }
-    private boolean isValidAdmin(String userName, String password) {
+    boolean isValidAdmin(String userName, String password) {
         //admin
         String adminEmail = "admin@4code.com";
         String adminPassword = "4code4code";
