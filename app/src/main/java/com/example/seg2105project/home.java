@@ -36,6 +36,8 @@ public class home extends AppCompatActivity {
     private FirebaseUser user;
     private DatabaseReference suspensionEndTimeRef;
     private DatabaseReference topicsRef;
+    private boolean isSuspended = false;
+
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -67,7 +69,11 @@ public class home extends AppCompatActivity {
         topicButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                displayTopics();
+                if (isSuspended) {
+                    Toast.makeText(home.this, "Your account is suspended. Please contact support.", Toast.LENGTH_SHORT).show();
+                } else {
+                    displayTopics();
+                }
             }
         });
 
@@ -91,7 +97,7 @@ public class home extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Long suspensionEndTime = dataSnapshot.getValue(Long.class);
-                messagetextview.setText("suspension end");
+                messagetextview.setText("");
                 if (suspensionEndTime != null && suspensionEndTime > System.currentTimeMillis()) {
                     // The tutor is suspended
                     long remainingTimeMillis = suspensionEndTime - System.currentTimeMillis();
@@ -102,6 +108,8 @@ public class home extends AppCompatActivity {
                             remainingHours + " hours and " + remainingMinutes + " minutes.";
 
                     messagetextview.setText(suspensionMessage);
+                     isSuspended = true;
+
                 }
             }
 
