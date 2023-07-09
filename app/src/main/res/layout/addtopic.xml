@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:background="@drawable/img">
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -11,42 +14,50 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Add Topic"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="@font/lobster"
             android:gravity="center"
-            android:layout_marginBottom="16dp"/>
+            android:text="Add Topic"
+            android:textSize="34sp"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/editTextTopicName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/calistoga"
             android:hint="Topic Name"
-            android:inputType="text"/>
+            android:inputType="text" />
 
         <EditText
             android:id="@+id/editTextYearsOfExperience"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/calistoga"
             android:hint="Years of Experience"
-            android:inputType="number"/>
+            android:inputType="number" />
 
         <EditText
             android:id="@+id/editTextExperienceDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/calistoga"
             android:hint="Experience Description"
             android:inputType="textMultiLine"
-            android:minLines="3"
-            android:maxLines="5"/>
+            android:maxLines="5"
+            android:minLines="3" />
 
         <Button
             android:id="@+id/buttonAddTopic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add"
+            android:layout_gravity="center"
             android:layout_marginTop="16dp"
-            android:layout_gravity="center"/>
+            android:fontFamily="@font/lobster"
+            android:text="Add"
+            android:textColor="@color/mocha"
+            android:textSize="24sp"
+            app:backgroundTint="@color/latte_brown" />
 
     </LinearLayout>
 

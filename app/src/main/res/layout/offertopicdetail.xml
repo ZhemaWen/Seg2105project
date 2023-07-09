@@ -1,8 +1,10 @@
 <!-- topic_detail.xml -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/library"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -10,21 +12,33 @@
         android:id="@+id/textViewTopicName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:background="@color/light_beige"
+        android:fontFamily="@font/calistoga"
+        android:textAlignment="center"
         android:textAppearance="?android:textAppearanceMedium"
-        android:textStyle="bold"
-        android:layout_marginBottom="8dp" />
+        android:textColor="@color/mocha"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textViewYearsOfExperience"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginBottom="8dp"
+        android:background="@color/light_beige"
+        android:fontFamily="@font/calistoga"
+        android:textAlignment="center"
+        android:textColor="@color/mocha" />
 
     <TextView
         android:id="@+id/textViewExperienceDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="16dp"
+        android:background="@color/light_beige"
+        android:fontFamily="@font/calistoga"
+        android:textAlignment="center"
+        android:textColor="@color/mocha" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,7 +50,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Remove" />
+            android:fontFamily="@font/calistoga"
+            android:text="Remove"
+            android:textColor="@color/mocha"
+            android:textSize="20sp"
+            app:backgroundTint="@color/latte" />
 
     </LinearLayout>
 
