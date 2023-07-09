@@ -52,11 +52,29 @@ public class ExampleUnitTest {
 
         assertEquals(false,isValidAdmin);
     }
+    
 
     @Test
-    public void testViewComplaintList() {
-        //to be completed
+    public void testAddToComplaintList() {
+        Complaint newComplaint = new Complaint() ;
+        Activity context=null;
 
+
+        ComplaintList activity = new ComplaintList(context, (List<Complaint>) newComplaint);
+        boolean isTopicAdded = activity.isComplaintAdded(newComplaint);
+        assertEquals(true,isTopicAdded);
+
+    }
+
+    @Test
+    public void testDeleteFromComplaintList() {
+        Complaint newComplaint = new Complaint() ;
+        Activity context=null;
+
+
+        ComplaintList activity = new ComplaintList(context, (List<Complaint>) newComplaint);
+        boolean isTopicAdded = activity.isComplaintDeleted(newComplaint);
+        assertEquals(false,isTopicAdded);
 
     }
 
