@@ -7,8 +7,9 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -35,9 +36,8 @@ public class home extends AppCompatActivity {
     private FirebaseAuth auth;
     private FirebaseUser user;
     private DatabaseReference suspensionEndTimeRef;
-    private DatabaseReference topicsRef;
+    private DatabaseReference topicsRef, offerTopicsRef;
     private boolean isSuspended = false;
-
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -50,6 +50,7 @@ public class home extends AppCompatActivity {
         topicButton = findViewById(R.id.topicButton);
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
+
 
         if (user == null) {
             Intent intent = new Intent(home.this, LogIn.class);
@@ -108,8 +109,7 @@ public class home extends AppCompatActivity {
                             remainingHours + " hours and " + remainingMinutes + " minutes.";
 
                     messagetextview.setText(suspensionMessage);
-                     isSuspended = true;
-
+                    isSuspended = true;
                 }
             }
 
@@ -119,11 +119,82 @@ public class home extends AppCompatActivity {
             }
         });
     }
+
+    private void displayOfferTopics() {
+        offerTopicsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<Topic> topics = new ArrayList<>();
+                for (DataSnapshot topicSnapshot : dataSnapshot.getChildren()) {
+                    Topic topic = topicSnapshot.getValue(Topic.class);
+                    if (topic != null) {
+                        topics.add(topic);
+                    }
+                }
+
+                // Create a dialog to display the topics list
+                AlertDialog.Builder builder = new AlertDialog.Builder(home.this);
+                View dialogView = getLayoutInflater().inflate(R.layout.offertopiclist, null);
+                builder.setView(dialogView);
+
+                // Retrieve the ListView from the dialog view
+                ListView listViewTopics = dialogView.findViewById(R.id.listViewTopics);
+
+                // Set up the adapter for the ListView
+                TopicList adapter = new TopicList(home.this, topics);
+                listViewTopics.setAdapter(adapter);
+                listViewTopics.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Topic topic = topics.get(position);
+                        showOfferTopicDialog(topic);
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle error
+            }
+        });
+    }
+
+    private void showOfferTopicDialog(final Topic topic) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.offertopicdetail, null);
+        dialogBuilder.setView(dialogView);
+        TextView topicName = dialogView.findViewById(R.id.textViewTopicName);
+        TextView year = dialogView.findViewById(R.id.textViewYearsOfExperience);
+        TextView detail = dialogView.findViewById(R.id.textViewExperienceDescription);
+        topicName.setText("Topic Name: " + topic.getTopicName());
+        year.setText("Year of Experience: " + topic.getYearsOfExperience());
+        detail.setText("Experience Description: " + topic.getExperienceDescription());
+
+        Button removeButton = dialogView.findViewById(R.id.buttonRemoveTopic);
+
+        final AlertDialog dialog = dialogBuilder.create();
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+
+        removeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                offerTopicsRef.child(topic.getTopicId()).removeValue();
+                dialog.dismiss();
+            }
+        });
+    }
+
     private void displayTopics() {
-        topicsRef = FirebaseDatabase.getInstance().getReference(). child("users")
+        topicsRef = FirebaseDatabase.getInstance().getReference().child("users")
                 .child(user.getUid())
                 .child("topics");
-
+        offerTopicsRef = FirebaseDatabase.getInstance().getReference().child("users")
+                .child(user.getUid())
+                .child("offerTopics");
         topicsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -140,25 +211,39 @@ public class home extends AppCompatActivity {
                 View dialogView = getLayoutInflater().inflate(R.layout.topiclist, null);
                 builder.setView(dialogView);
 
+
                 // Retrieve the ListView from the dialog view
                 ListView listViewTopics = dialogView.findViewById(R.id.listViewTopics);
 
                 // Set up the adapter for the ListView
                 TopicList adapter = new TopicList(home.this, topics);
                 listViewTopics.setAdapter(adapter);
+                listViewTopics.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Topic topic = topics.get(position);
+                        showTopicDialog(topic);
+                    }
+                });
 
-                AlertDialog dialog = builder.create();
-                dialog.show();
-                Button addTopic = dialogView.findViewById(R.id.buttonAddTopic);
-
-
-
-                addTopic.setOnClickListener(new View.OnClickListener() {
+                Button addTopicButton = dialogView.findViewById(R.id.buttonAddTopic);
+                addTopicButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         showAddTopic();
                     }
                 });
+
+                Button offerListButton = dialogView.findViewById(R.id.buttonOfferlist);
+                offerListButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        displayOfferTopics();
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
 
             @Override
@@ -166,8 +251,8 @@ public class home extends AppCompatActivity {
                 // Handle error
             }
         });
-
     }
+
     private void showAddTopic() {
         AlertDialog.Builder builder = new AlertDialog.Builder(home.this);
         View dialogView = getLayoutInflater().inflate(R.layout.addtopic, null);
@@ -179,6 +264,7 @@ public class home extends AppCompatActivity {
         Button buttonAddTopic = dialogView.findViewById(R.id.buttonAddTopic);
 
         AlertDialog dialog = builder.create();
+        dialog.setCanceledOnTouchOutside(true);
         dialog.show();
 
         buttonAddTopic.setOnClickListener(new View.OnClickListener() {
@@ -194,28 +280,111 @@ public class home extends AppCompatActivity {
                     return;
                 }
 
-                // Create a new Topic object with the input data
-                String topicId = topicsRef.push().getKey();
-                Topic topic = new Topic(topicId, topicName, yearsOfExperience, experienceDescription);
+                topicsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        int numTopics = (int) dataSnapshot.getChildrenCount();
 
-                // Save the topic to the database
-                topicsRef.child(topicId).setValue(topic)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(home.this, "Topic added successfully", Toast.LENGTH_SHORT).show();
-                                    dialog.dismiss();
-                                } else {
-                                    Toast.makeText(home.this, "Failed to add topic", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
+                        // Check if the maximum limit (20) is reached
+                        if (numTopics >= 20) {
+                            Toast.makeText(home.this, "You have reached the maximum limit of 20 topics", Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+                            return;
+                        }
+
+                        // Create a new Topic object with the input data
+                        String topicId = topicsRef.push().getKey();
+                        Topic topic = new Topic(topicId, topicName, yearsOfExperience, experienceDescription);
+
+                        // Save the topic to the database
+                        topicsRef.child(topicId).setValue(topic)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Toast.makeText(home.this, "Topic added successfully", Toast.LENGTH_SHORT).show();
+                                            dialog.dismiss();
+                                        } else {
+                                            Toast.makeText(home.this, "Failed to add topic", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        // Handle error
+                    }
+                });
+            }
+        });
+    }
+
+    private void showTopicDialog(final Topic topic) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.topicdetail, null);
+        dialogBuilder.setView(dialogView);
+        TextView topicName = dialogView.findViewById(R.id.textViewTopicName);
+        TextView year = dialogView.findViewById(R.id.textViewYearsOfExperience);
+        TextView detail = dialogView.findViewById(R.id.textViewExperienceDescription);
+        topicName.setText("Topic Name: " + topic.getTopicName());
+        year.setText("Year of Experience: " + topic.getYearsOfExperience());
+        detail.setText("Experience Description: " + topic.getExperienceDescription());
+
+        Button removeButton = dialogView.findViewById(R.id.buttonRemoveTopic);
+        Button offerButton = dialogView.findViewById(R.id.buttonOffer);
+
+        final AlertDialog dialog = dialogBuilder.create();
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+
+        removeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(topic.getIsOffered()){
+                    offerTopicsRef.child(topic.getTopicId()).removeValue();
+                }
+                topicsRef.child(topic.getTopicId()).removeValue();
+                dialog.dismiss();
+            }
+        });
+
+        offerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                offerTopicsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        int numTopics = (int) dataSnapshot.getChildrenCount();
+
+                        // Check if the maximum limit (5) is reached
+                        if (numTopics >= 5) {
+                            Toast.makeText(home.this, "You have reached the maximum limit of 5 topics", Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+                            return;
+                        }
+                            // Save the topic to the database
+                        if(topic.getIsOffered()) {
+                            Toast.makeText(home.this, "already offered", Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+                            return;
+                        }
+                            topic.offered();
+                            offerTopicsRef.child(topic.getTopicId()).setValue(topic);
+                            // The topic with the given ID does not exist in the database
+
+                            dialog.dismiss();
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        // Handle error
+                    }
+                });
             }
         });
     }
 }
-
-
-
-
