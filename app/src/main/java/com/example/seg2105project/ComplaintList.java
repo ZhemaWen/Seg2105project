@@ -62,4 +62,18 @@ public class ComplaintList extends ArrayAdapter<Complaint> {
         return listViewItem;
     }
 
+    boolean isComplaintAdded(Complaint complaint) {
+        if (complaints.contains(complaint)) {
+            return true;
+        }
+        return false;
+    }
+
+    boolean isComplaintDeleted(Complaint complaint) {
+        if (complaints.contains(complaint)) {
+            return false;
+        }
+        return true;
+    }
+
 }
