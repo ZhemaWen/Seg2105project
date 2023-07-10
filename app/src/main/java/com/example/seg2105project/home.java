@@ -372,6 +372,7 @@ public class home extends AppCompatActivity {
                             return;
                         }
                             topic.offered();
+                            topicsRef.child(topic.getTopicId()).child("isOffered").setValue(true);
                             offerTopicsRef.child(topic.getTopicId()).setValue(topic);
                             // The topic with the given ID does not exist in the database
 
