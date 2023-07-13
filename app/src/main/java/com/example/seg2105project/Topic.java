@@ -2,6 +2,7 @@ package com.example.seg2105project;
 
 
 public class Topic {
+    private  String tutorId;
          private String topicId;
         private String topicName;
         private String yearsOfExperience;
@@ -13,13 +14,17 @@ public class Topic {
             // Default constructor required for Firebase database
         }
 
-        public Topic(String topicId, String topicName, String yearsOfExperience, String experienceDescription) {
+        public Topic(String tutorId,String topicId, String topicName, String yearsOfExperience, String experienceDescription) {
+            this.tutorId = tutorId;
             this.topicId = topicId;
             this.topicName = topicName;
             this.yearsOfExperience = yearsOfExperience;
             this.experienceDescription = experienceDescription;
             this.isOffered = false;
         }
+        public String getTutorId(){
+            return tutorId;
+    }
          public String getTopicId() {
         return topicId;
     }
@@ -44,6 +49,7 @@ public class Topic {
         public String getExperienceDescription() {
             return experienceDescription;
         }
+
 
 
 

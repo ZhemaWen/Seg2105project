@@ -111,6 +111,14 @@ public class home extends AppCompatActivity {
                     messagetextview.setText(suspensionMessage);
                     isSuspended = true;
                 }
+                else if(suspensionEndTime != null){
+                    FirebaseDatabase.getInstance().getReference()
+                            .child("users")
+                            .child(user.getUid())
+                            .child("userInfo").child("isSuspended").setValue(false);
+                    suspensionEndTimeRef.removeValue();
+
+                }
             }
 
             @Override
@@ -183,6 +191,7 @@ public class home extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 offerTopicsRef.child(topic.getTopicId()).removeValue();
+                topicsRef.child(topic.getTopicId()).child("isOffered").setValue(false);
                 dialog.dismiss();
             }
         });
@@ -294,7 +303,7 @@ public class home extends AppCompatActivity {
 
                         // Create a new Topic object with the input data
                         String topicId = topicsRef.push().getKey();
-                        Topic topic = new Topic(topicId, topicName, yearsOfExperience, experienceDescription);
+                        Topic topic = new Topic(user.getUid(),topicId, topicName, yearsOfExperience, experienceDescription);
 
                         // Save the topic to the database
                         topicsRef.child(topicId).setValue(topic)
@@ -374,6 +383,7 @@ public class home extends AppCompatActivity {
                             topic.offered();
                             topicsRef.child(topic.getTopicId()).child("isOffered").setValue(true);
                             offerTopicsRef.child(topic.getTopicId()).setValue(topic);
+                            offerTopicsRef.child(topic.getTopicId()).child("tutorId").setValue(user.getUid());
                             // The topic with the given ID does not exist in the database
 
                             dialog.dismiss();
