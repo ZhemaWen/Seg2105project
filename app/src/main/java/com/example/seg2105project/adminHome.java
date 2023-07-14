@@ -205,22 +205,6 @@ public class adminHome extends AppCompatActivity {
         // Optionally, you can update the UI or show a message to indicate the complaint has been dismissed
     }
 
-    boolean isComplaintViewable(Complaint complaint) {
-
-        if (listViewComplaints.getClipChildren()) {
-            return true;
-        }
-        return false;
-    }
-
-    boolean isComplaintDismissible(Complaint complaint) {
-
-        if (listViewComplaints.getClipChildren()) {
-            return false;
-        }
-        return true;
-    }
-
 
 
 

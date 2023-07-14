@@ -52,7 +52,7 @@ public class ExampleUnitTest {
 
         assertEquals(false,isValidAdmin);
     }
-
+    
 
     @Test
     public void testAddToComplaintList() {
@@ -101,33 +101,5 @@ public class ExampleUnitTest {
         boolean isTopicDeleted = activity.isTopicDeleted(newTopic);
         assertEquals(false,isTopicDeleted);
 
-    }
-
-    @Test
-    public void testSuspendedTutorIndefinitely() {
-        //To be added
-    }
-
-    @Test
-    public void testSuspendedTutorTemporarily() {
-        //To be added
-    }
-
-    @Test
-    public void testViewComplaint() {
-        Complaint newComplaint = new Complaint() ;
-
-        adminHome activity = new adminHome();
-        boolean isComplaintViewable = activity.isComplaintViewable(newComplaint);
-        assertEquals(true, isComplaintViewable);
-    }
-
-    @Test
-    public void testDismissComplaint() {
-        Complaint newComplaint = new Complaint() ;
-
-        adminHome activity = new adminHome();
-        boolean isComplaintDismissible = activity.isComplaintDismissible(newComplaint);
-        assertEquals(false, isComplaintDismissible);
     }
 }
