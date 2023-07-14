@@ -10,7 +10,7 @@ public class Topic {
 
         private boolean isOffered;
 
-        public Topic() {
+        public Topic(String s, String physics, String s1, String specialization) {
             // Default constructor required for Firebase database
         }
 
