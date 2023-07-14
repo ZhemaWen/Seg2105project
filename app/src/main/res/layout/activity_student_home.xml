@@ -4,12 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/img"
     tools:context=".StudentHome">
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="317dp"
         android:layout_height="133dp"
+        android:fontFamily="@font/lobster"
         android:text="Welcome to Tutron. You are logged in as an User"
+        android:textAlignment="center"
+        android:textSize="34sp"
         tools:layout_editor_absoluteX="47dp"
         tools:layout_editor_absoluteY="177dp" />
 
@@ -17,7 +22,10 @@
         android:id="@+id/logoutButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/calistoga"
         android:text="Logout"
+        android:textSize="24sp"
+        app:backgroundTint="@color/latte_brown"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"

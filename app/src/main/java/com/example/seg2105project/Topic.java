@@ -7,6 +7,8 @@ public class Topic {
         private String yearsOfExperience;
         private String experienceDescription;
 
+        private boolean isOffered;
+
         public Topic() {
             // Default constructor required for Firebase database
         }
@@ -16,8 +18,9 @@ public class Topic {
             this.topicName = topicName;
             this.yearsOfExperience = yearsOfExperience;
             this.experienceDescription = experienceDescription;
+            this.isOffered = false;
         }
-         public String getTopicIdtId() {
+         public String getTopicId() {
         return topicId;
     }
 
@@ -25,24 +28,23 @@ public class Topic {
             return topicName;
         }
 
-        public void setTopicName(String topicName) {
-            this.topicName = topicName;
+        public boolean getIsOffered() {
+            return isOffered;
+        }
+        public void offered(){
+            this.isOffered=true;
         }
 
         public String getYearsOfExperience() {
             return yearsOfExperience;
         }
 
-        public void setYearsOfExperience(String yearsOfExperience) {
-            this.yearsOfExperience = yearsOfExperience;
-        }
+
 
         public String getExperienceDescription() {
             return experienceDescription;
         }
 
-        public void setExperienceDescription(String experienceDescription) {
-            this.experienceDescription = experienceDescription;
-        }
+
 
     }
