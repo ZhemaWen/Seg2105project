@@ -10,6 +10,11 @@ public class Topic {
 
         private boolean isOffered;
 
+
+        private float tutorRating;
+
+        private Tutor tutor;
+
         public Topic(String s, String physics, String s1, String specialization) {
             // Default constructor required for Firebase database
         }
@@ -44,9 +49,15 @@ public class Topic {
             return yearsOfExperience;
         }
 
+        public void setTutorRating(float tutorRating) {
+         this.tutorRating = tutorRating;
+         }
 
+    public Tutor getTutor() {
+        return tutor;
+    }
 
-        public String getExperienceDescription() {
+    public String getExperienceDescription() {
             return experienceDescription;
         }
 
