@@ -645,12 +645,19 @@ public class StudentHome extends AppCompatActivity {
             public void onClick(View v) {
                 DatabaseReference reviewRef = FirebaseDatabase.getInstance().getReference().child("users")
                         .child(request.getStudentId()).child("reviews").child(review.getReviewId());
-                Toast.makeText(StudentHome.this, review.getReviewId(), Toast.LENGTH_SHORT).show();
+
 
                 reviewRef.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
+                            FirebaseDatabase.getInstance().getReference().child("users")
+                                    .child(request.getStudentId()).child("requests")
+                                    .child(request.getRequestId()).child("review").setValue(false);
+                            FirebaseDatabase.getInstance().getReference().child("users")
+                                    .child(request.getStudentId()).child("requests")
+                                    .child(request.getRequestId()).child("topic").child("isOffered").setValue(false);
+                            request.setReview(false);
                             Toast.makeText(StudentHome.this, "Review remove successfully", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(StudentHome.this, "Failed to remove review", Toast.LENGTH_SHORT).show();
@@ -686,9 +693,13 @@ public class StudentHome extends AppCompatActivity {
                     Toast.makeText(StudentHome.this, "Review not within a week", Toast.LENGTH_SHORT).show();
 
                 } else {
+                    DatabaseReference reviewRef = FirebaseDatabase.getInstance().getReference().child("users")
+                            .child(request.getStudentId()).child("reviews").child(review.getReviewId());
 
+
+                    reviewRef.removeValue();
                     DatabaseReference tutorRef = FirebaseDatabase.getInstance().getReference().child("users")
-                            .child(request.getTutorId()).child("ratings");
+                            .child(request.getTutorId()).child("userInfo").child("lessonsRate");
                     studentRef.child("studentName").addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -696,15 +707,33 @@ public class StudentHome extends AppCompatActivity {
                             if (dataSnapshot.exists()) {
                                 // Retrieve the value from the dataSnapshot
                                 String name = dataSnapshot.getValue(String.class);
+                                String reviewId = studentRef.child("reviews").push().getKey();
                                 String studentName = checkBoxAnonymous.isChecked() ? "Anonymous" : name; // Replace "Student Name" with actual student name implementation
+                                Date reviewDate = new Date(System.currentTimeMillis());
 
-                                Review newreview = new Review(review.getReviewId(), studentName, review.getDate(), request, Integer.parseInt(rating), reviewText);
-                                studentRef.child("reviews").child(review.getReviewId()).setValue(newreview)
+                                Review review = new Review(reviewId, studentName, reviewDate, request, Integer.parseInt(rating), reviewText);
+                                studentRef.child("reviews").child(reviewId).setValue(review)
                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 if (task.isSuccessful()) {
-                                                    tutorRef.setValue(rating);
+                                                    tutorRef.addValueEventListener(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                            if (snapshot.exists()) {
+                                                                Double totalRating = snapshot.getValue(Double.class);
+                                                                double newRating = (totalRating + Double.parseDouble(rating)) / 2;
+                                                                tutorRef.setValue(newRating);
+                                                            } else {
+                                                                tutorRef.setValue(Double.parseDouble(rating));
+                                                            }
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                                        }
+                                                    });
                                                     FirebaseDatabase.getInstance().getReference().child("users")
                                                             .child(request.getStudentId()).child("requests")
                                                             .child(request.getRequestId()).child("review").setValue(true);
