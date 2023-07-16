@@ -13,6 +13,9 @@ public class Topic {
         public Topic() {
             // Default constructor required for Firebase database
         }
+    public Topic(String s, String physics, String s1, String specialization){
+
+    }
 
         public Topic(String tutorId,String topicId, String topicName, String yearsOfExperience, String experienceDescription) {
             this.tutorId = tutorId;
@@ -49,6 +52,8 @@ public class Topic {
         public String getExperienceDescription() {
             return experienceDescription;
         }
+
+
 
 
 

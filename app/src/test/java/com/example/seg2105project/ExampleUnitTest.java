@@ -102,4 +102,41 @@ public class ExampleUnitTest {
         assertEquals(false,isTopicDeleted);
 
     }
+
+    @Test
+    public void studentPutsInvalidCardNumber() {
+        Student newStudent = new Student() ;
+        newStudent.getCardNumber();
+        StudentRegister activity = new StudentRegister();
+        boolean isCardNumberValid = activity.isCardNumberValid(newStudent);
+        assertEquals(false, isCardNumberValid);
+    }
+
+    @Test
+    public void studentPutsInvalidEmailAddress() {
+        Student newStudent = new Student() ;
+        newStudent.getEmail();
+        StudentRegister activity = new StudentRegister();
+        boolean isEmailAddressValid = activity.isEmailAddressValid(newStudent);
+        assertEquals(false, isEmailAddressValid);
+    }
+
+    @Test
+    public void testViewComplaint() {
+        Complaint newComplaint = new Complaint() ;
+
+        adminHome activity = new adminHome();
+        boolean isComplaintViewable = activity.isComplaintViewable(newComplaint);
+        assertEquals(true, isComplaintViewable);
+    }
+
+    @Test
+    public void testDismissComplaint() {
+        Complaint newComplaint = new Complaint() ;
+
+        adminHome activity = new adminHome();
+        boolean isComplaintDismissible = activity.isComplaintDismissible(newComplaint);
+        assertEquals(false, isComplaintDismissible);
+    }
+
 }

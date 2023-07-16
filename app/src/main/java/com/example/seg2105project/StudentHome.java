@@ -18,6 +18,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -486,7 +487,7 @@ public class StudentHome extends AppCompatActivity {
         TextView textViewTimeSlot = dialogView.findViewById(R.id.textViewTimeSlot);
         Button buttonComplaint = dialogView.findViewById(R.id.buttonComplaint);
         Button buttonRate = dialogView.findViewById(R.id.buttonReview);
-        EditText editTextRating = dialogView.findViewById(R.id.editTextRating);
+        RatingBar ratingBar =dialogView.findViewById(R.id.ratingBar);
         EditText editTextComplaint = dialogView.findViewById(R.id.editTextComplaint);
         CheckBox checkBoxAnonymous = dialogView.findViewById(R.id.checkBoxAnonymous);
 
@@ -529,7 +530,10 @@ public class StudentHome extends AppCompatActivity {
         buttonRate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String rating = editTextRating.getText().toString().trim();
+                float rate = ratingBar.getRating();
+                int ratingInt = Math.round(rate);
+                String rating = String.valueOf(ratingInt);
+
                 String reviewText = editTextComplaint.getText().toString().trim();
                 DatabaseReference studentRef = FirebaseDatabase.getInstance().getReference().child("users")
                         .child(request.getStudentId());
@@ -621,6 +625,7 @@ public class StudentHome extends AppCompatActivity {
         View dialogView = getLayoutInflater().inflate(R.layout.reviewdetail, null);
         builder.setView(dialogView);
 
+
         TextView textViewTopicName = dialogView.findViewById(R.id.textViewTopicName);
         TextView textViewYearsOfExperience = dialogView.findViewById(R.id.textViewYearsOfExperience);
         TextView textViewExperienceDescription = dialogView.findViewById(R.id.textViewExperienceDescription);
@@ -628,9 +633,9 @@ public class StudentHome extends AppCompatActivity {
         TextView textViewTimeSlot = dialogView.findViewById(R.id.textViewTimeSlot);
         Button buttonDelete = dialogView.findViewById(R.id.buttonDelete);
         Button buttonChange = dialogView.findViewById(R.id.buttonChange);
-        EditText editTextRating = dialogView.findViewById(R.id.editTextRating);
         EditText editTextComplaint = dialogView.findViewById(R.id.editTextComplaint);
         CheckBox checkBoxAnonymous = dialogView.findViewById(R.id.checkBoxAnonymous);
+        RatingBar ratingBar = dialogView.findViewById(R.id.ratingBar);
 
         // Set the request details in the views
         textViewTopicName.setText("Topic name: " + request.getTopic().getTopicName());
@@ -677,7 +682,9 @@ public class StudentHome extends AppCompatActivity {
                 boolean isMoreThanAWeekAgo = timeDifference > millisecondsInWeek;
 
 
-                String rating = editTextRating.getText().toString().trim();
+                float rate = ratingBar.getRating();
+                int ratingInt = Math.round(rate);
+                String rating = String.valueOf(ratingInt);
                 String reviewText = editTextComplaint.getText().toString().trim();
                 DatabaseReference studentRef = FirebaseDatabase.getInstance().getReference().child("users")
                         .child(request.getStudentId());
@@ -742,6 +749,7 @@ public class StudentHome extends AppCompatActivity {
                                                             .child(request.getRequestId()).child("topic").child("isOffered").setValue(true);
                                                     request.setReview(true);
                                                     Toast.makeText(StudentHome.this, "Review submitted successfully", Toast.LENGTH_SHORT).show();
+                                                    recreate();
                                                 } else {
                                                     Toast.makeText(StudentHome.this, "Failed to submit review", Toast.LENGTH_SHORT).show();
                                                 }
