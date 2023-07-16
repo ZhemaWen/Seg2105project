@@ -27,33 +27,38 @@
 
     <Button
         android:id="@+id/studentButton"
-        android:layout_width="wrap_content"
+        android:layout_width="190dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="160dp"
+        android:layout_marginEnd="160dp"
         android:fontFamily="@font/calistoga"
         android:text="As a Student"
-        android:textColor="@color/mocha"
+        android:textColor="@color/dark_mocha"
         android:textSize="24sp"
-        app:backgroundTint="@color/light_beige"
+        app:backgroundTint="@color/latte"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titleText"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.4" />
 
     <Button
         android:id="@+id/tutorButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_width="190dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="160dp"
+        android:layout_marginEnd="160dp"
+        android:layout_marginBottom="300dp"
         android:fontFamily="@font/calistoga"
         android:text="As a Tutor"
-        android:textColor="@color/light_beige"
+        android:textColor="@color/nude_light_toffee"
         android:textSize="24sp"
-        app:backgroundTint="@color/mocha_light"
+        app:backgroundTint="@color/brown_latte"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/studentButton"
-        app:layout_constraintVertical_bias="0.2" />
+        app:layout_constraintTop_toBottomOf="@id/loginButton"
+        app:layout_constraintVertical_bias="0.2"
+        tools:ignore="NotSibling" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
