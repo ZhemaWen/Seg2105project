@@ -31,39 +31,57 @@
         android:id="@+id/logoutButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="28dp"
         android:fontFamily="@font/calistoga"
         android:text="Logout"
         android:textColor="@color/mocha"
         app:backgroundTint="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/messagetextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        tools:layout_editor_absoluteX="147dp"
+        tools:layout_editor_absoluteY="264dp" />
 
     <TextView
         android:id="@+id/messagetextView"
         android:layout_width="317dp"
         android:layout_height="133dp"
         android:layout_marginTop="28dp"
-        android:layout_marginBottom="212dp"
         android:background="@color/latte_brown"
         android:text=""
         android:textColor="@color/mocha"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logoutButton" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.592" />
 
+    <!-- Add this button at the appropriate location in your layout -->
     <Button
         android:id="@+id/topicButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="Topics"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/messagetextView" />
+
+    <Button
+        android:id="@+id/RequestsButton"
+        android:layout_width="118dp"
+        android:layout_height="52dp"
+        android:text="Requests"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/messagetextView"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/viewProfileRatingButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View Profile and Rating"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="107dp"
+        tools:layout_editor_absoluteY="667dp" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
