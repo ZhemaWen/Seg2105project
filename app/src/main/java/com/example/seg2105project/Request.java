@@ -10,6 +10,7 @@ public class Request {
     private String status;
     private String timeSlot;
     private String date;
+    private boolean review;
 
     public Request() {
         // Default constructor required for Firebase
@@ -24,6 +25,7 @@ public class Request {
         status = "Pending"; // Initialize status as "Pending"
         this.timeSlot=timeSlot;
         this.date=date;
+        this.review=false;
     }
 
     public Topic getTopic() {
@@ -70,10 +72,15 @@ public class Request {
         return timeSlot;
     }
 
-
+    public boolean isReview() {
+        return review;
+    }
 
     public String getDate(){
         return date;
+    }
+    public void setReview(boolean review){
+        this.review=review;
     }
 }
 

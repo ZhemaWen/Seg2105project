@@ -36,6 +36,13 @@
         android:textSize="18sp"
         app:backgroundTint="@color/latte" />
 
+    <EditText
+        android:id="@+id/editTextSearch"
+        android:layout_width="match_parent"
+        android:layout_height="88dp"
+        android:hint="Search keyword"
+        android:inputType="text" />
+
     <Button
         android:id="@+id/buttonSort"
         android:layout_width="match_parent"

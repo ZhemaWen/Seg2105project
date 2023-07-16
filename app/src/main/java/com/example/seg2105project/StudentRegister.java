@@ -152,8 +152,9 @@ public class StudentRegister extends AppCompatActivity {
                                                     String userId = mAuth.getCurrentUser().getUid();
 
                                                     DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference().child("users");
-
+                                                    Student student = new Student(firstName,  lastName, email,  address,  cardNumber, holderName,  cvv);
                                                     usersRef.child(userId).child("userType").setValue("Student");
+                                                    usersRef.child(userId).child("studentName").setValue(firstName +" "+ lastName);
                                                     Toast.makeText(StudentRegister.this, "Registration successful", Toast.LENGTH_SHORT).show();
                                                 } else {
                                                     Toast.makeText(StudentRegister.this, "Authentication failed", Toast.LENGTH_SHORT).show();

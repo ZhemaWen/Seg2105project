@@ -189,24 +189,8 @@ public class TutorRegister extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
-                                                // Generate a complaint for the newly registered tutor
-                                                DatabaseReference complaintsRef = FirebaseDatabase.getInstance().getReference().child("complaints");
-                                                String complaintId = complaintsRef.push().getKey();
-                                                String complaintDescription = "New tutor registration complaint";
-                                                long currentTimestamp = System.currentTimeMillis();
-                                                Date date = new Date(currentTimestamp);
-                                                Complaint complaint = new Complaint(complaintId, userId, complaintDescription, date);
-                                                complaintsRef.child(complaintId).setValue(complaint)
-                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                            @Override
-                                                            public void onComplete(@NonNull Task<Void> task) {
-                                                                if (task.isSuccessful()) {
-                                                                    Toast.makeText(TutorRegister.this, "Registration successful", Toast.LENGTH_SHORT).show();
-                                                                } else {
-                                                                    Toast.makeText(TutorRegister.this, "Failed to save tutor information", Toast.LENGTH_SHORT).show();
-                                                                }
-                                                            }
-                                                        });
+                                                Toast.makeText(TutorRegister.this, "Registration successful", Toast.LENGTH_SHORT).show();
+
                                             } else {
                                                 Toast.makeText(TutorRegister.this, "Failed to save tutor information", Toast.LENGTH_SHORT).show();
                                             }

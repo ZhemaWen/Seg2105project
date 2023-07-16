@@ -197,6 +197,7 @@ public class adminHome extends AppCompatActivity {
         complaintsRef.child(complaint.getComplaintId()).child("suspended").setValue(true);
         DatabaseReference tutorRef = FirebaseDatabase.getInstance().getReference().child("users").child(complaint.getTutorId());
         tutorRef.child("suspensionEndTime").setValue(suspensionEndTimestamp);
+        tutorRef.child("userInfo").child("isSuspended").setValue(true);
         // Optionally, you can update the UI or show a message to indicate the tutor has been suspended
     }
     private void dismissComplaint(Complaint complaint) {
