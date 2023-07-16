@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/img"
+    android:background="@drawable/neutralpattern"
     tools:context=".MainActivity">
 
     <TextView
@@ -29,34 +29,54 @@
 
     <Button
         android:id="@+id/loginButton"
-        android:layout_width="0dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="150dp"
+        android:layout_marginStart="160dp"
+        android:layout_marginTop="250dp"
+        android:layout_marginEnd="160dp"
+        android:layout_marginBottom="16dp"
         android:fontFamily="@font/calistoga"
-        android:text="Login"
-        android:textColor="@color/mocha"
-        android:textSize="24sp"
-        app:backgroundTint="@color/latte_brown"
+        android:text="@string/login"
+        android:textSize="22sp"
+        app:backgroundTint="@color/latte"
+        app:layout_constraintBottom_toTopOf="@+id/registerButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/welcomeText"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5"
         app:layout_constraintWidth_percent="0.6" />
 
     <Button
         android:id="@+id/registerButton"
-        android:layout_width="0dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/calistoga"
-        android:text="Register"
-        android:textColor="@color/white"
-        android:textSize="24sp"
-        app:backgroundTint="@color/latte_brown"
+        android:text="@string/register"
+        android:textColor="@color/dark_mocha"
+        android:textSize="22sp"
+        app:backgroundTint="@color/latte"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginButton"
         app:layout_constraintWidth_percent="0.6" />
+
+    <TextView
+        android:id="@+id/app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="160dp"
+        android:layout_marginTop="600dp"
+        android:layout_marginEnd="160dp"
+        android:layout_marginBottom="100dp"
+        android:fontFamily="@font/lobster"
+        android:text="@string/tutron"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

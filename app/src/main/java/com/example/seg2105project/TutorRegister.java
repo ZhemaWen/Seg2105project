@@ -20,7 +20,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.SignInMethodQueryResult;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -38,6 +37,7 @@ public class TutorRegister extends AppCompatActivity {
     public FirebaseAuth mAuth;
     Button BSelectImage;
     private ImageView IVPreviewImage;
+    private Button requestButton;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -57,6 +57,7 @@ public class TutorRegister extends AppCompatActivity {
         registerButton = findViewById(R.id.registerButton);
         BSelectImage = findViewById(R.id.addProfilePictureButton);
         IVPreviewImage = findViewById(R.id.IVPreviewImage);
+        requestButton = findViewById(R.id.RequestsButton);
 
         // handle the Choose Image button to trigger
         // the image chooser function
@@ -70,6 +71,14 @@ public class TutorRegister extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 register();
+            }
+        });
+
+        requestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TutorRegister.this, RequestsActivity.class);
+                startActivity(intent);
             }
         });
     }

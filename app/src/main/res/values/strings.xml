@@ -11,6 +11,17 @@
     </string-array>
 
     <string name="native_language_prompt">Select Native Language</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="tutron">Tutron</string>
+    <string name="quote">Study now, be proud later.</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="email_address">Email Address</string>
+    <string name="password">Password</string>
+    <string name="address">Address</string>
+    <string name="credit_card_information">Credit Card Information</string>
+    <string name="register_btn">Register</string>
     <string-array name="native_languages">
         <item>English</item>
         <item>French</item>
