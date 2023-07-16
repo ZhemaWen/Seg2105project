@@ -16,12 +16,16 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -361,4 +365,48 @@ public class StudentHome extends AppCompatActivity {
         dialog.show();
     }
 
-}
+
+
+
+    private void tutorRating(Topic topic){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View dialogView = getLayoutInflater().inflate(R.layout.student_ratings, null);
+        builder.setView(dialogView);
+
+        RatingBar ratingBar = dialogView.findViewById(R.id.student_ratingBar);
+        Button submitButton = dialogView.findViewById(R.id.submit_rating);
+
+        AlertDialog dialog = builder.create();
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                float rating = ratingBar.getRating();
+                topic.setTutorRating(rating);
+
+                DatabaseReference topicRef = FirebaseDatabase.getInstance().getReference().child("topic").child(topic.getTopicId());
+                topicRef.child("tutorRating").setValue(rating)
+                        .addOnSuccessListener(new OnSuccessListener<Void>(){
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                // Rating successfully updated
+                                dialog.dismiss();
+                                Snackbar.make(v, "Rating submitted successfully.", Snackbar.LENGTH_SHORT).show();
+
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                // An error occurred while updating the rating
+                                Snackbar.make(v, "Failed to submit rating. Please try again.", Snackbar.LENGTH_SHORT).show();
+                            }
+                        });
+            }
+        });
+
+        dialog.show();
+    }
+
+    }
+
+
