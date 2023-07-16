@@ -167,4 +167,18 @@ public class StudentRegister extends AppCompatActivity {
                     }
                 });
     }
+
+    boolean isEmailAddressValid(Student student) {
+        if (emailEditText.equals(student.getEmail())) {
+            return true;
+        }
+        return false;
+    }
+
+    boolean isCardNumberValid(Student student) {
+        if (cardNumberEditText.equals(student.getCardNumber())) {
+            return true;
+        }
+        return false;
+    }
 }

@@ -104,13 +104,21 @@ public class ExampleUnitTest {
     }
 
     @Test
-    public void testSuspendedTutorIndefinitely() {
-        //To be added
+    public void studentPutsInvalidCardNumber() {
+        Student newStudent = new Student() ;
+        newStudent.getCardNumber();
+        StudentRegister activity = new StudentRegister();
+        boolean isCardNumberValid = activity.isCardNumberValid(newStudent);
+        assertEquals(false, isCardNumberValid);
     }
 
     @Test
-    public void testSuspendedTutorTemporarily() {
-        //To be added
+    public void studentPutsInvalidEmailAddress() {
+        Student newStudent = new Student() ;
+        newStudent.getEmail();
+        StudentRegister activity = new StudentRegister();
+        boolean isEmailAddressValid = activity.isEmailAddressValid(newStudent);
+        assertEquals(false, isEmailAddressValid);
     }
 
     @Test

@@ -220,8 +220,4 @@ public class adminHome extends AppCompatActivity {
         }
         return true;
     }
-
-
-
-
 }
