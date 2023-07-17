@@ -8,6 +8,10 @@ public class Tutor {
     private String educationLevel;
     private String nativeLanguage;
     private String description;
+    private boolean isSuspended;
+    private double hourlyRate;
+    private int lessonsGiven;
+    private double lessonsRate;
 
     public Tutor() {
         // Default constructor required for Firebase database operations
@@ -21,6 +25,10 @@ public class Tutor {
         this.educationLevel = educationLevel;
         this.nativeLanguage = nativeLanguage;
         this.description = description;
+        this.isSuspended = false;
+        this.hourlyRate=0;
+        this.lessonsGiven=0;
+        this.lessonsRate=0;
     }
 
     public String getFirstName() {
@@ -45,6 +53,19 @@ public class Tutor {
 
     public String getDescription() {
         return description;
+    }
+    public boolean getIsSuspended(){return isSuspended;}
+
+    public double getHourlyRate() {
+        return hourlyRate;
+    }
+
+    public double getLessonsRate() {
+        return lessonsRate;
+    }
+
+    public int getLessonsGiven() {
+        return lessonsGiven;
     }
 }
 

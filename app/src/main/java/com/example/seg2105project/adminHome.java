@@ -197,12 +197,28 @@ public class adminHome extends AppCompatActivity {
         complaintsRef.child(complaint.getComplaintId()).child("suspended").setValue(true);
         DatabaseReference tutorRef = FirebaseDatabase.getInstance().getReference().child("users").child(complaint.getTutorId());
         tutorRef.child("suspensionEndTime").setValue(suspensionEndTimestamp);
+        tutorRef.child("userInfo").child("isSuspended").setValue(true);
         // Optionally, you can update the UI or show a message to indicate the tutor has been suspended
     }
     private void dismissComplaint(Complaint complaint) {
         DatabaseReference complaintRef = complaintsRef.child(complaint.getComplaintId());
         complaintRef.removeValue();
         // Optionally, you can update the UI or show a message to indicate the complaint has been dismissed
+    }
+    boolean isComplaintViewable(Complaint complaint) {
+
+        if (listViewComplaints.getClipChildren()) {
+            return true;
+        }
+        return false;
+    }
+
+    boolean isComplaintDismissible(Complaint complaint) {
+
+        if (listViewComplaints.getClipChildren()) {
+            return false;
+        }
+        return true;
     }
 
 

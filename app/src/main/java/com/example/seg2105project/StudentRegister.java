@@ -61,6 +61,19 @@ public class StudentRegister extends AppCompatActivity {
             }
         });
     }
+    boolean isEmailAddressValid(Student student) {
+        if (emailEditText.equals(student.getEmail())) {
+            return true;
+        }
+        return false;
+    }
+
+    boolean isCardNumberValid(Student student) {
+        if (cardNumberEditText.equals(student.getCardNumber())) {
+            return true;
+        }
+        return false;
+    }
 
     private void register() {
         // Get input values
@@ -152,8 +165,9 @@ public class StudentRegister extends AppCompatActivity {
                                                     String userId = mAuth.getCurrentUser().getUid();
 
                                                     DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference().child("users");
-
+                                                    Student student = new Student(firstName,  lastName, email,  address,  cardNumber, holderName,  cvv);
                                                     usersRef.child(userId).child("userType").setValue("Student");
+                                                    usersRef.child(userId).child("studentName").setValue(firstName +" "+ lastName);
                                                     Toast.makeText(StudentRegister.this, "Registration successful", Toast.LENGTH_SHORT).show();
                                                 } else {
                                                     Toast.makeText(StudentRegister.this, "Authentication failed", Toast.LENGTH_SHORT).show();

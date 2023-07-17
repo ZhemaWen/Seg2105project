@@ -1,0 +1,63 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/imageViewTutorPhoto"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/placeholderprofile" />
+
+    <TextView
+        android:id="@+id/textViewTutorName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tutor Name"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:id="@+id/textViewNativeLanguage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Native Language: English"
+        android:textSize="14sp"
+        android:layout_marginTop="8dp"/>
+
+    <TextView
+        android:id="@+id/textViewHourlyRate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hourly Rate: $25"
+        android:textSize="14sp"
+        android:layout_marginTop="8dp"/>
+
+    <TextView
+        android:id="@+id/textViewTutorDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Average Rating: 4.5"
+        android:textSize="14sp"
+        android:layout_marginTop="8dp"/>
+
+    <TextView
+        android:id="@+id/textViewLessonsGiven"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lessons Given: 50"
+        android:textSize="14sp"
+        android:layout_marginTop="8dp"/>
+
+    <TextView
+        android:id="@+id/textViewLessonsRating"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lessons Rating: 4.2"
+        android:textSize="14sp"
+        android:layout_marginTop="8dp"/>
+
+</LinearLayout>

@@ -1,6 +1,7 @@
 package com.example.seg2105project;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +26,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -31,7 +36,7 @@ import java.util.List;
 
 public class home extends AppCompatActivity {
 
-    private Button logoutButton, topicButton;
+    private Button logoutButton, topicButton,requestButton,profileButton;
     private TextView textView, messagetextview;
     private FirebaseAuth auth;
     private FirebaseUser user;
@@ -48,6 +53,8 @@ public class home extends AppCompatActivity {
         messagetextview = findViewById(R.id.messagetextView);
         logoutButton = findViewById(R.id.logoutButton);
         topicButton = findViewById(R.id.topicButton);
+        requestButton = findViewById(R.id.requestsButton);
+        profileButton = findViewById(R.id.profileButton);
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
 
@@ -74,6 +81,46 @@ public class home extends AppCompatActivity {
                     Toast.makeText(home.this, "Your account is suspended. Please contact support.", Toast.LENGTH_SHORT).show();
                 } else {
                     displayTopics();
+                }
+            }
+        });
+        requestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isSuspended) {
+                    Toast.makeText(home.this, "Your account is suspended. Please contact support.", Toast.LENGTH_SHORT).show();
+                } else {
+                    displayRequests();
+
+
+                }
+            }
+        });
+        profileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isSuspended) {
+                    Toast.makeText(home.this, "Your account is suspended. Please contact support.", Toast.LENGTH_SHORT).show();
+                } else {
+                    DatabaseReference tutorRef = FirebaseDatabase.getInstance().getReference()
+                            .child("users")
+                            .child(user.getUid())
+                            .child("userInfo");
+
+                    tutorRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Tutor tutor = dataSnapshot.getValue(Tutor.class);
+                            if (tutor != null) {
+                                displayTutorProfile(tutor);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            // Handle error
+                        }
+                    });
                 }
             }
         });
@@ -110,6 +157,14 @@ public class home extends AppCompatActivity {
 
                     messagetextview.setText(suspensionMessage);
                     isSuspended = true;
+                }
+                else if(suspensionEndTime != null){
+                    FirebaseDatabase.getInstance().getReference()
+                            .child("users")
+                            .child(user.getUid())
+                            .child("userInfo").child("isSuspended").setValue(false);
+                    suspensionEndTimeRef.removeValue();
+
                 }
             }
 
@@ -183,6 +238,7 @@ public class home extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 offerTopicsRef.child(topic.getTopicId()).removeValue();
+                topicsRef.child(topic.getTopicId()).child("isOffered").setValue(false);
                 dialog.dismiss();
             }
         });
@@ -294,7 +350,7 @@ public class home extends AppCompatActivity {
 
                         // Create a new Topic object with the input data
                         String topicId = topicsRef.push().getKey();
-                        Topic topic = new Topic(topicId, topicName, yearsOfExperience, experienceDescription);
+                        Topic topic = new Topic(user.getUid(),topicId, topicName, yearsOfExperience, experienceDescription);
 
                         // Save the topic to the database
                         topicsRef.child(topicId).setValue(topic)
@@ -374,6 +430,7 @@ public class home extends AppCompatActivity {
                             topic.offered();
                             topicsRef.child(topic.getTopicId()).child("isOffered").setValue(true);
                             offerTopicsRef.child(topic.getTopicId()).setValue(topic);
+                            offerTopicsRef.child(topic.getTopicId()).child("tutorId").setValue(user.getUid());
                             // The topic with the given ID does not exist in the database
 
                             dialog.dismiss();
@@ -388,4 +445,237 @@ public class home extends AppCompatActivity {
             }
         });
     }
+    private void displayRequests(){
+        {
+            DatabaseReference requestRef = FirebaseDatabase.getInstance().getReference()
+                    .child("users").child(user.getUid()).child("requests");
+            Query query = requestRef.orderByChild("timestamp");
+            query.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    List<Request> requests = new ArrayList<>();
+                    for (DataSnapshot requestSnapshot : dataSnapshot.getChildren()) {
+                        Request request = requestSnapshot.getValue(Request.class);
+                        if (request != null) {
+                            requests.add(request);
+                        }
+                    }
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(home.this);
+                    View dialogView = getLayoutInflater().inflate(R.layout.requestlist, null);
+                    builder.setView(dialogView);
+
+                    ListView listViewRequests = dialogView.findViewById(R.id.listViewRequest);
+
+                    // Create the custom RequestList adapter to display the list of requests
+                    Requestlist adapter = new Requestlist(home.this, requests);
+
+                    listViewRequests.setAdapter(adapter);
+
+                    listViewRequests.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            // Handle item click here
+                            Request selectedRequest = requests.get(position);
+                            // Perform the desired action for the selected request
+                            displayTutorRequestDetail(selectedRequest);
+
+                        }
+                    });
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    // Handle error
+                }
+            });
+        }
+
+    }
+    private void displayTutorRequestDetail(Request request) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View dialogView = getLayoutInflater().inflate(R.layout.tutor_request_detail, null);
+        builder.setView(dialogView);
+
+        TextView textViewTopicName = dialogView.findViewById(R.id.textViewTopicName);
+        TextView textViewYearsOfExperience = dialogView.findViewById(R.id.textViewYearsOfExperience);
+        TextView textViewExperienceDescription = dialogView.findViewById(R.id.textViewExperienceDescription);
+        TextView textViewDate = dialogView.findViewById(R.id.textViewDate);
+        TextView textViewTimeSlot = dialogView.findViewById(R.id.textViewTimeSlot);
+        Button buttonApprove = dialogView.findViewById(R.id.buttonApprove);
+        Button buttonReject = dialogView.findViewById(R.id.buttonReject);
+
+        // Set the request details in the views
+        textViewTopicName.setText("Topic name: " + request.getTopic().getTopicName());
+        textViewYearsOfExperience.setText("Years of Experience: " + request.getTopic().getYearsOfExperience());
+        textViewExperienceDescription.setText("Description: " + request.getTopic().getExperienceDescription());
+        textViewDate.setText("Date: " + request.getDate());
+        textViewTimeSlot.setText("Time Slot: " + request.getTimeSlot());
+
+        // Set click listeners for the buttons
+        DatabaseReference tutorRef = FirebaseDatabase.getInstance().getReference().child("users")
+                .child(user.getUid())
+                .child("requests");
+        DatabaseReference studentRef = FirebaseDatabase.getInstance().getReference().child("users")
+                .child(request.getStudentId())
+                .child("requests");
+        if(request.getStatus().equals("Pending")) {
+            buttonApprove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    tutorRef.child(request.getRequestId()).child("status").setValue("Approve")
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        studentRef.child(request.getRequestId()).child("status").setValue("Approve")
+                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        if (task.isSuccessful()) {
+                                                            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference()
+                                                                    .child("users")
+                                                                    .child(user.getUid())
+                                                                    .child("userInfo")
+                                                                    .child("lessonsGiven");
+
+                                                            userRef.runTransaction(new Transaction.Handler() {
+                                                                @NonNull
+                                                                @Override
+                                                                public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
+                                                                    Integer currentValue = mutableData.getValue(Integer.class);
+                                                                    if (currentValue == null) {
+                                                                        // If the value is null, initialize it to 0
+                                                                        mutableData.setValue(0);
+                                                                    } else {
+                                                                        // Increment the value by 1
+                                                                        mutableData.setValue(currentValue + 1);
+                                                                    }
+                                                                    return Transaction.success(mutableData);
+                                                                }
+
+                                                                @Override
+                                                                public void onComplete(@Nullable DatabaseError databaseError, boolean committed, @Nullable DataSnapshot dataSnapshot) {
+
+                                                                }
+                                                            });
+                                                            studentRef.child(request.getRequestId()).child("review").setValue(false);
+                                                            Toast.makeText(getApplicationContext(), "Request Approved", Toast.LENGTH_SHORT).show();
+                                                        } else {
+                                                            Toast.makeText(getApplicationContext(), "Failed to approve request", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+                                                });
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), "Failed to approve request", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                }
+            });
+
+            buttonReject.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    tutorRef.child(request.getRequestId()).removeValue()
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        studentRef.child(request.getRequestId()).child("status").setValue("Reject")
+                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        if (task.isSuccessful()) {
+                                                            Toast.makeText(getApplicationContext(), "Request Rejected", Toast.LENGTH_SHORT).show();
+                                                        } else {
+                                                            Toast.makeText(getApplicationContext(), "Failed to reject request", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+                                                });
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), "Failed to reject request", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                }
+            });
+        }
+        else{
+            Toast.makeText(getApplicationContext(), "unable to change request not pending", Toast.LENGTH_SHORT).show();
+
+        }
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+    private void displayTutorProfile(Tutor tutor) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(home.this);
+        View dialogView = getLayoutInflater().inflate(R.layout.tutor_profile, null);
+        builder.setView(dialogView);
+
+        ImageView imageViewTutorPhoto = dialogView.findViewById(R.id.imageViewTutorPhoto);
+        TextView textViewTutorName = dialogView.findViewById(R.id.textViewTutorName);
+        TextView textViewNativeLanguage = dialogView.findViewById(R.id.textViewNativeLanguage);
+        TextView textViewHourlyRate = dialogView.findViewById(R.id.textViewHourlyRate);
+        EditText editTextHourlyRate = dialogView.findViewById(R.id.editTextHourlyRate);
+        Button buttonUpdateHourlyRate = dialogView.findViewById(R.id.buttonUpdateHourlyRate);
+        TextView textViewDescription = dialogView.findViewById(R.id.textViewDescription);
+        TextView textViewLessonsGiven = dialogView.findViewById(R.id.textViewLessonsGiven);
+        TextView textViewLessonsRating = dialogView.findViewById(R.id.textViewLessonsRating);
+
+        // Set the tutor information
+        // imageViewTutorPhoto.setImageResource(tutor.getPhoto()); // Set the actual tutor photo
+        textViewTutorName.setText(tutor.getFirstName() + " " + tutor.getLastName());
+        textViewNativeLanguage.setText("Native Language: " + tutor.getNativeLanguage());
+        textViewHourlyRate.setText("Hourly Rate: $" + tutor.getHourlyRate());
+        editTextHourlyRate.setText(String.valueOf(tutor.getHourlyRate()));
+        textViewDescription.setText("Description: " + tutor.getDescription());
+        textViewLessonsGiven.setText("Lessons Given: " + tutor.getLessonsGiven());
+        textViewLessonsRating.setText("Lessons Rating: " + tutor.getLessonsRate());
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        buttonUpdateHourlyRate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String newHourlyRateStr = editTextHourlyRate.getText().toString().trim();
+                if (!newHourlyRateStr.isEmpty()) {
+                    // Check if the input is a valid number with two decimal places and no negative values
+                    if (newHourlyRateStr.matches("^\\d+(\\.\\d{1,2})?$") && Double.parseDouble(newHourlyRateStr) >= 0) {
+                        double newHourlyRate = Double.parseDouble(newHourlyRateStr);
+                        // Update the tutor's hourly rate in the database
+                        DatabaseReference hourlyRateRef = FirebaseDatabase.getInstance().getReference()
+                                .child("users")
+                                .child(user.getUid())
+                                .child("userInfo")
+                                .child("hourlyRate");
+
+                        hourlyRateRef.setValue(newHourlyRate, new DatabaseReference.CompletionListener() {
+                            @Override
+                            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                                if (databaseError == null) {
+                                    textViewHourlyRate.setText("Hourly Rate: $" + newHourlyRate);
+                                    Toast.makeText(home.this, "Hourly rate updated successfully", Toast.LENGTH_SHORT).show();
+                                    dialog.dismiss();
+                                } else {
+                                    Toast.makeText(home.this, "Failed to update hourly rate", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                    } else {
+                        Toast.makeText(home.this, "Please enter a valid hourly rate (positive number with two decimal places)", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(home.this, "Please enter a valid hourly rate", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+    }
+
+
 }
